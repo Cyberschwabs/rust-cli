@@ -1,6 +1,5 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use human_panic::setup_panic;
 
 /// Search for a pattern in a file and display the lines that contain it.
 #[derive(Parser)]
@@ -13,19 +12,27 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-fn main() -> Result<()> {
-    setup_panic!();
+fn main() {
+    read_file().unwrap();
+}
+
+fn read_file() -> Result<()> {
     let args = Cli::parse();
 
     let content = std::fs::read_to_string(&args.path)
         .with_context(|| format!("could not read file `{}`", args.path.display()))?;   
 
+    println!("Searching for '{}' in file '{}'\n", args.pattern, args.path.to_string_lossy());
+
     for line in content.lines() {
+        // Dont check empty lines
         if line.contains(&args.pattern) {
-            println!("Searching for '{}' in file '{}'\n", args.pattern, args.path.to_string_lossy());
-            println!("{}", line);
+            println!("{} Found on line: {}", &args.pattern, line);
+        }
+        else if line.is_empty() || !line.contains(&args.pattern) {
+            println!("Pattern: {}; not found in line: {}", &args.pattern, line);
+            continue;
         }
     };
-
     Ok(())
 }
