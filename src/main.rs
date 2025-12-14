@@ -44,7 +44,7 @@ enum Commands {
 }
 
 fn main() -> Result<()> {
-    let args = Cli::parse();
+    let args: Cli = Cli::parse();
 
     match args.command {
         Commands::Pattern { path, pattern } => {

@@ -9,7 +9,7 @@ pub fn find_file(file: std::path::PathBuf) {
         return;
     }
 
-    let file_name = file_name.unwrap();
+    let file_name: &str = file_name.unwrap();
 
     let drives: &[&str] = if cfg!(windows) {
         &["C:\\", "D:\\"]
@@ -18,6 +18,7 @@ pub fn find_file(file: std::path::PathBuf) {
     };
 
     for drive in drives {
+        print!("Searching in drive: {}\n", drive);
         for entry in WalkDir::new(drive)
             .into_iter()
             .filter_map(Result::ok)
