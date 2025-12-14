@@ -7,3 +7,5 @@ edition = "2024"
 clap = { version = "4.5.53", features = ["derive"] }
 anyhow = "1.0.100"
 human-panic = "2.0.4"
+opener = "0.8.3"
+walkdir = "2.5.0"
