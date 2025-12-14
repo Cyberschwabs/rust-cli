@@ -1,7 +1,12 @@
 [package]
-name = "rust-net"
+name = "rust-cli"
 version = "0.1.0"
 edition = "2024"
+keywords = ["cli", "search", "demo"]
+categories = ["command-line-utilities"]
+authors = ["cyberschwabs@gmail.com"]
+description = "A tool to search, open, and read files"
+readme = "README.md"
 
 [dependencies]
 clap = { version = "4.5.53", features = ["derive"] }
