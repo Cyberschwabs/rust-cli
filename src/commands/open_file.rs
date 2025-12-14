@@ -1,5 +1,4 @@
 use anyhow::{Context, Result};
-use clap::{Parser, Subcommand};
 
 pub fn open_file(path: std::path::PathBuf) -> Result<()> {
     println!("Opening file '{}'", path.display());

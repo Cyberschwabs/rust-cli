@@ -1,5 +1,3 @@
-use anyhow::{Context, Result};
-use clap::{Parser, Subcommand};
 use walkdir::WalkDir;
 
 pub fn find_file(file: std::path::PathBuf) {
