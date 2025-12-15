@@ -12,7 +12,7 @@ pub fn find_file(file: std::path::PathBuf) {
     let file_name: &str = file_name.unwrap();
 
     let drives: &[&str] = if cfg!(windows) {
-        &["C:\\", "D:\\"]
+        &["C:\\"]
     } else {
         &["/"]
     };
