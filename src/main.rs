@@ -24,7 +24,7 @@ enum Commands {
     /// Search for a pattern in a file
     Pattern {
         #[arg(long)]
-        path: std::path::PathBuf,
+        path: Option<std::path::PathBuf>,
 
         #[arg(long)]
         pattern: String,
