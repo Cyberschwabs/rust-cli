@@ -28,6 +28,21 @@ if (Test-Path $rustupPath) {
     Invoke-WebRequest -Uri "https://win.rustup.rs/x86_64" -OutFile "C:\Users\$env:USERNAME\Downloads\rustup-init.exe"
     Start-Process "C:\Users\$env:USERNAME\Downloads\rustup-init.exe" -ArgumentList "-y" -NoNewWindow -Wait
 
+    <#  
+        --- Install the Following tools in Visula Studio under Individual Components ---
+            MSVC v143 - VS 2022 C++ x64/x86 build tools
+            Windows 11 SDK (10.0.22621.0)
+    #>
+
     Write-Host "🎉 Installed successfully!" -ForegroundColor Green
     Write-Host "Run: rust-cli --help" -ForegroundColor Magenta
+
+    Write-Host " 
+        !!! Install the Following tools in Visula Studio under Individual Components !!!
+
+            - MSVC v143 - VS 2022 C++ x64/x86 build tools
+            - Windows 11 SDK (10.0.22621.0)
+
+            If not installed you will run into Compile issues on Windows!
+        " -ForegroundColor Red
 }
