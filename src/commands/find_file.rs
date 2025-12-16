@@ -18,7 +18,7 @@ pub fn find_file(file: std::path::PathBuf) {
     };
 
     for drive in drives {
-        print!("Searching in drive: {}\n", drive);
+        print!("\nSearching in drive: {}\n", drive);
         for entry in WalkDir::new(drive)
             .into_iter()
             .filter_map(Result::ok)
