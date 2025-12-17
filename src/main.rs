@@ -29,13 +29,11 @@ enum Commands {
         #[arg(long)]
         pattern: String,
     },
-
     /// Open the file at the given path
     Open {
         #[arg(long)]
         path: std::path::PathBuf,
     },
-
     /// Find a file on the system
     Find {
         #[arg(long)]
@@ -45,20 +43,16 @@ enum Commands {
 
 fn main() -> Result<()> {
     let args: Cli = Cli::parse();
-
     match args.command {
         Commands::Pattern { path, pattern } => {
             read_file(path, pattern)?;
         }
-
         Commands::Open { path } => {
             open_file(path)?;
         }
-
         Commands::Find { file } => {
             find_file(file);
         }
     }
-
     Ok(())
 }
