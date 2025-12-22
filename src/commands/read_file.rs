@@ -27,11 +27,18 @@ fn is_hidden(entry: &DirEntry) -> bool {
 }
 
 /// Read files and search for a pattern
-pub fn read_file(path: Option<PathBuf>, pattern: String, large: Option<bool>) -> Result<()> {
+pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<()> {
     if pattern.is_empty() {
         println!("Empty pattern; nothing to search.\n");
         return Ok(());
     }
+
+    if large != true {
+        println!("\nLarge file scanning is disabled.");
+    } else {
+        println!("\nLarge file scanning is enabled.");
+    }
+
     match path {
         // No path provided: walk default roots
         None => {
@@ -41,92 +48,50 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: Option<bool>) ->
                 &["/home"]
             };
 
-            match large {
-                None => {
-                    for root in roots {
-                        println!("\nScanning directory '{}' for pattern '{}'\n", root, pattern);
+            for root in roots {
+                println!("\nScanning directory '{}' for pattern '{}'\n", root, pattern);
 
-                        for entry in WalkDir::new(root)
-                            .follow_links(false)
-                            .into_iter()
-                            .filter_entry(|e| !is_hidden(e))
-                            .filter_map(|e| e.ok())
-                        {
-                            if !entry.file_type().is_file() {
-                                continue;
-                            }
-
-                            let path = entry.path();
-
-                            // Skip large files (>10MB)
-                            let metadata = match entry.metadata() {
-                                Ok(m) => m,
-                                Err(_) => continue,
-                            };
-
-                            if metadata.len() > 10_000_000 {
-                                continue;
-                            }
-
-                            let content = match fs::read_to_string(path) {
-                                Ok(c) => c,
-                                Err(_) => continue,
-                            };
-
-                            // Skip binary files
-                            if content.contains('\0') {
-                                continue;
-                            }
-
-                            for (index, line) in content.lines().enumerate() {
-                                if line.contains(&pattern) {
-                                    println!(
-                                        "{}: Line: {} - {}\n",
-                                        path.display(),
-                                        index + 1,
-                                        line
-                                    );
-                                }
-                            }
-                        }
+                for entry in WalkDir::new(root)
+                    .follow_links(false)
+                    .into_iter()
+                    .filter_entry(|e| !is_hidden(e))
+                    .filter_map(|e| e.ok())
+                {
+                    if !entry.file_type().is_file() {
+                        continue;
                     }
-                }
-                Some(_large) => {
-                    for root in roots {
-                        println!("\nScanning directory '{}' for pattern '{}'\n", root, pattern);
 
-                        for entry in WalkDir::new(root)
-                            .follow_links(false)
-                            .into_iter()
-                            .filter_entry(|e| !is_hidden(e))
-                            .filter_map(|e| e.ok())
-                        {
-                            if !entry.file_type().is_file() {
-                                continue;
-                            }
+                    let path = entry.path();
 
-                            let path = entry.path();
+                    // Skip large files (>10MB)
+                    let metadata = match entry.metadata() {
+                        Ok(m) => m,
+                        Err(_) => continue,
+                    };
 
-                            let content = match fs::read_to_string(path) {
-                                Ok(c) => c,
-                                Err(_) => continue,
-                            };
+                    if large != true {
+                        if metadata.len() > 10_000_000 {}
+                        continue;
+                    }
 
-                            // Skip binary files
-                            if content.contains('\0') {
-                                continue;
-                            }
+                    let content = match fs::read_to_string(path) {
+                        Ok(c) => c,
+                        Err(_) => continue,
+                    };
 
-                            for (index, line) in content.lines().enumerate() {
-                                if line.contains(&pattern) {
-                                    println!(
-                                        "{}: Line: {} - {}\n",
-                                        path.display(),
-                                        index + 1,
-                                        line
-                                    );
-                                }
-                            }
+                    // Skip binary files
+                    if content.contains('\0') {
+                        continue;
+                    }
+
+                    for (index, line) in content.lines().enumerate() {
+                        if line.contains(&pattern) {
+                            println!(
+                                "{}: Line: {} - {}\n",
+                                path.display(),
+                                index + 1,
+                                line
+                            );
                         }
                     }
                 }

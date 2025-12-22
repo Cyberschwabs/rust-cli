@@ -30,8 +30,8 @@ enum Commands {
         #[arg(short, long)]
         pattern: String,
 
-        #[arg(short, long, default_value = "false")]
-        large: Option<bool>,
+        #[arg(short, long)]
+        large: bool,
     },
     /// Open the file at the given path
     Open {
