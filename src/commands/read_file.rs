@@ -93,7 +93,7 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
                     for (index, line) in content.lines().enumerate() {
                         if line.contains(&pattern) {
                             println!(
-                                "{}: Line: {} - {}\n",
+                                "{}: \nLine: {}\n{}\n",
                                 path.display(),
                                 index + 1,
                                 line
@@ -116,7 +116,11 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
 
             for (index, line) in content.lines().enumerate() {
                 if line.contains(&pattern) {
-                    println!("Line {}: {}", index + 1, line);
+                    println!(
+                        "Line {}: {}", 
+                        index + 1,
+                        line
+                    );
                     found = true;
                 }
             }
