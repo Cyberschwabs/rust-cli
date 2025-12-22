@@ -1,4 +1,5 @@
 use anyhow::{Context, Result};
+use std::env;
 use std::fs;
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
@@ -34,22 +35,27 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
     }
 
     if large != true {
-        println!("\nLarge file scanning is disabled.");
+        println!("\nLarge file search is disabled.")
     } else {
-        println!("\nLarge file scanning is enabled.");
+        println!("\nLarge file search is enabled.")
     }
 
     match path {
-        // No path provided: walk default roots
+        // No path provided: walk the current working directory
         None => {
-            let roots: &[&str] = if cfg!(windows) {
-                &["C:\\"]
-            } else {
-                &["/home"]
+            let roots: Vec<PathBuf> = match env::current_dir() {
+                Ok(p) => vec![p],
+                Err(_) => {
+                    if cfg!(windows) {
+                        vec![PathBuf::from("C:\\")]
+                    } else {
+                        vec![PathBuf::from("/")]
+                    }
+                }
             };
 
-            for root in roots {
-                println!("\nScanning directory '{}' for pattern '{}'\n", root, pattern);
+            for root in roots.iter() {
+                println!("\nScanning directory '{}' for pattern '{}'\n", root.display(), pattern);
 
                 for entry in WalkDir::new(root)
                     .follow_links(false)
@@ -69,8 +75,7 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
                         Err(_) => continue,
                     };
 
-                    if large != true {
-                        if metadata.len() > 10_000_000 {}
+                    if metadata.len() > 10_000_000 {
                         continue;
                     }
 
@@ -120,5 +125,6 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
             }
         }
     }
+
     Ok(())
 }
