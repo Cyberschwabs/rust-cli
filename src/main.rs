@@ -27,17 +27,20 @@ enum Commands {
         #[arg(long)]
         path: Option<std::path::PathBuf>,
 
-        #[arg(long)]
+        #[arg(short, long)]
         pattern: String,
+
+        #[arg(short, long, default_value = "false")]
+        large: Option<bool>,
     },
     /// Open the file at the given path
     Open {
-        #[arg(long)]
+        #[arg(short, long)]
         path: std::path::PathBuf,
     },
     /// Find a file on the system
     Find {
-        #[arg(long)]
+        #[arg(short, long)]
         file: std::path::PathBuf,
     },
 }
@@ -46,8 +49,8 @@ enum Commands {
 async fn main() -> Result<()> {
     let args: Cli = Cli::parse();
     match args.command {
-        Commands::Pattern { path, pattern } => {
-            read_file(path, pattern)?;
+        Commands::Pattern { path, pattern, large } => {
+            read_file(path, pattern, large)?;
         }
         Commands::Open { path } => {
             open_file(path)?;
