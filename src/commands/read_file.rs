@@ -74,8 +74,9 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
                         Ok(m) => m,
                         Err(_) => continue,
                     };
-
-                    if metadata.len() > 10_000_000 {
+                    
+                    if large != true {
+                        if metadata.len() > 10_000_000 {}
                         continue;
                     }
 
