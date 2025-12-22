@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand};
 use anyhow::Result;
+use tokio;
 
 // Declare modules
 mod commands;
@@ -41,7 +42,8 @@ enum Commands {
     },
 }
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let args: Cli = Cli::parse();
     match args.command {
         Commands::Pattern { path, pattern } => {
