@@ -76,8 +76,9 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
                     };
                     
                     if large != true {
-                        if metadata.len() > 10_000_000 {}
-                        continue;
+                        if metadata.len() > 50_000_000 {
+                            continue;
+                        }
                     }
 
                     let content = match fs::read_to_string(path) {
@@ -93,7 +94,7 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
                     for (index, line) in content.lines().enumerate() {
                         if line.contains(&pattern) {
                             println!(
-                                "{}: \nLine: {}\n{}\n",
+                                "Path: {}\nLine {}: {}\n",
                                 path.display(),
                                 index + 1,
                                 line
