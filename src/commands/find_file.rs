@@ -1,6 +1,7 @@
 use walkdir::WalkDir;
+use indicatif::ProgressBar;
 
-pub fn find_file(file: std::path::PathBuf) {
+pub fn find_file(file: std::path::PathBuf, pb: ProgressBar) {
     let file_name = file
         .file_name()
         .and_then(|n| n.to_str());
@@ -26,6 +27,9 @@ pub fn find_file(file: std::path::PathBuf) {
             let path = entry.path();
 
             if path.is_file() {
+                // increment progress per file checked
+                pb.inc(1);
+
                 if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
                     if name.contains(file_name) {
                         println!("{}", path.display());

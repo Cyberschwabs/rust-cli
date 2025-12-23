@@ -3,6 +3,7 @@ use std::env;
 use std::fs;
 use std::path::PathBuf;
 use walkdir::{DirEntry, WalkDir};
+use indicatif::ProgressBar;
 
 /// Detect hidden files/directories in a cross-platform way
 fn is_hidden(entry: &DirEntry) -> bool {
@@ -28,7 +29,7 @@ fn is_hidden(entry: &DirEntry) -> bool {
 }
 
 /// Read files and search for a pattern
-pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<()> {
+pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool, pb: ProgressBar) -> Result<()> {
     if pattern.is_empty() {
         println!("Empty pattern; nothing to search.\n");
         return Ok(());
@@ -66,6 +67,9 @@ pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool) -> Result<
                     if !entry.file_type().is_file() {
                         continue;
                     }
+
+                    // update progress per file encountered
+                    pb.inc(1);
 
                     let path = entry.path();
 

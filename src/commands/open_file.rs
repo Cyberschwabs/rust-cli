@@ -1,7 +1,9 @@
 use anyhow::{Context, Result};
+use indicatif::ProgressBar;
 
-pub fn open_file(path: std::path::PathBuf) -> Result<()> {
-    println!("Opening file '{}'", path.display());
+pub fn open_file(path: std::path::PathBuf, pb: ProgressBar) -> Result<()> {
+    pb.set_message(format!("Opening file {}", path.display()));
+    pb.inc(1);
 
     if path.exists() {
         opener::open(&path)

@@ -1,6 +1,8 @@
 use clap::{Parser, Subcommand};
 use anyhow::Result;
 use tokio;
+use indicatif::{ProgressBar};
+use std::time::Duration;
 
 // Declare modules
 mod commands;
@@ -45,19 +47,27 @@ enum Commands {
     },
 }
 
+// Progress bar is created in `main` and passed to command functions so
+// all branches can report progress consistently.
+
 #[tokio::main]
 async fn main() -> Result<()> {
     let args: Cli = Cli::parse();
+
+    let pb = ProgressBar::new_spinner();
+    pb.enable_steady_tick(Duration::from_millis(100));
+
     match args.command {
         Commands::Pattern { path, pattern, large } => {
-            read_file(path, pattern, large)?;
+            read_file(path, pattern, large, pb.clone())?;
         }
         Commands::Open { path } => {
-            open_file(path)?;
+            open_file(path, pb.clone())?;
         }
         Commands::Find { file } => {
-            find_file(file);
+            find_file(file, pb.clone());
         }
     }
+    pb.finish_with_message("Search Completed ✅");
     Ok(())
 }
