@@ -29,7 +29,7 @@ fn is_hidden(entry: &DirEntry) -> bool {
 }
 
 /// Read files and search for a pattern
-pub fn read_file(path: Option<PathBuf>, pattern: String, large: bool, pb: ProgressBar) -> Result<()> {
+pub fn find_pattern_file(path: Option<PathBuf>, pattern: String, large: bool, pb: ProgressBar) -> Result<()> {
     if pattern.is_empty() {
         println!("Empty pattern; nothing to search.\n");
         return Ok(());

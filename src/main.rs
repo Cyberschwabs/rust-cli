@@ -9,7 +9,7 @@ mod commands;
 
 use commands::find_file::find_file;
 use commands::open_file::open_file;
-use commands::read_file::read_file;
+use commands::find_pattern_file::find_pattern_file;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -59,7 +59,7 @@ async fn main() -> Result<()> {
 
     match args.command {
         Commands::Pattern { path, pattern, large } => {
-            read_file(path, pattern, large, pb.clone())?;
+            find_pattern_file(path, pattern, large, pb.clone())?;
         }
         Commands::Open { path } => {
             open_file(path, pb.clone())?;
