@@ -92,6 +92,6 @@ async fn main() -> Result<()> {
             move_file(source, destination, pb.clone())?;
         }
     }
-    pb.finish_with_message("Search Completed ✅");
+    pb.finish_with_message("\nCompleted ✅");
     Ok(())
 }
