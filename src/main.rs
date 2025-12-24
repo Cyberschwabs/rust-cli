@@ -10,6 +10,8 @@ mod commands;
 use commands::find_file::find_file;
 use commands::open_file::open_file;
 use commands::find_pattern_file::find_pattern_file;
+use commands::copy_file::copy_file;
+use commands::move_file::move_file;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -45,6 +47,22 @@ enum Commands {
         #[arg(short, long)]
         file: std::path::PathBuf,
     },
+    /// Copy File
+    Copy {
+        #[arg(short, long)]
+        source: std::path::PathBuf,
+
+        #[arg(short, long)]
+        destination: std::path::PathBuf,
+    },
+    /// Move File
+    Move {
+        #[arg(short, long)]
+        source: std::path::PathBuf,
+
+        #[arg(short, long)]
+        destination: std::path::PathBuf,
+    },
 }
 
 // Progress bar is created in `main` and passed to command functions so
@@ -66,6 +84,12 @@ async fn main() -> Result<()> {
         }
         Commands::Find { file } => {
             find_file(file, pb.clone());
+        }
+        Commands::Copy { source, destination } => {
+            copy_file(source, destination, pb.clone());
+        }
+        Commands::Move { source, destination } => {
+            move_file(source, destination, pb.clone());
         }
     }
     pb.finish_with_message("Search Completed ✅");
