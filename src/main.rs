@@ -86,10 +86,10 @@ async fn main() -> Result<()> {
             find_file(file, pb.clone());
         }
         Commands::Copy { source, destination } => {
-            copy_file(source, destination, pb.clone());
+            copy_file(source, destination, pb.clone())?;
         }
         Commands::Move { source, destination } => {
-            move_file(source, destination, pb.clone());
+            move_file(source, destination, pb.clone())?;
         }
     }
     pb.finish_with_message("Search Completed ✅");
